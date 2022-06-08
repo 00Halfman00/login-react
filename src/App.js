@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+
+import NavBar from './components/NavBar';
+import Login from './components/LogIn/LogIn';
+import Home from './components/Home/Home';
 
 function App() {
+  const [log, setLog] = useState(false);
+  const [user, setUser] = useState();
+
+  function logHandler(email, password) {
+    console.log(user);
+    setLog(!log);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <NavBar logged={log} changeLog={logHandler} user={user}/>
+      <main>
+        {!log && <Login log={log} changeLog={logHandler} setUser={setUser} />}
+        {log && <Home user={user} />}
+        </main>
+    </React.Fragment>
   );
 }
 
