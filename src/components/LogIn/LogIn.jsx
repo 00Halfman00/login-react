@@ -9,9 +9,16 @@ const LogIn = ({ logged, changeLog, setUser }) => {
   const [valid, setValid] = useState(false);
 
   useEffect(() => {
-    if (enteredEmail.includes('@') && enteredPassword.length > 7) {
-      setValid(true);
-    }
+    const time = setTimeout(() => {
+      console.log('inside setTimeout')
+      if (enteredEmail.includes('@') && enteredPassword.length > 7) {
+        setValid(true);
+      }
+    }, 1000);
+    return () => {
+      console.log('inside cleanup')
+      clearTimeout(time);
+    };
     //console.log(enteredPassword)
     //console.log(enteredEmail)
   }, [enteredEmail, enteredPassword]);
@@ -56,24 +63,35 @@ const LogIn = ({ logged, changeLog, setUser }) => {
     <Card className={styles['logIn-card']}>
       <form onSubmit={submitHandler} className={styles['logIn-form']}>
         <div className={styles['input-control']}>
-          <label>email:</label>
+          <label htmlFor='email'>email:</label>
           <input
-          className={enteredEmail.includes('@') ? (styles['form-input']) : (styles['form-needs-input'])}
-          type="email"
-          placeholder='must include: @' onChange={emailHandler}>
-          </input>
+            className={
+              enteredEmail.includes('@')
+                ? styles['form-input']
+                : styles['form-needs-input']
+            }
+            id='email'
+            type="email"
+            placeholder="must include: @"
+            onChange={emailHandler}
+          ></input>
         </div>
         <div className={styles['input-control']}>
-          <label>password:</label>
+          <label htmlFor='password'>password:</label>
           <input
-            className={ enteredPassword.length > 7 ? (styles['form-input']) : (styles['form-needs-input'])}
+            className={
+              enteredPassword.length > 7
+                ? styles['form-input']
+                : styles['form-needs-input']
+            }
+            id='password'
             type="password"
-            placeholder='minimum: 8 characters'
+            placeholder="minimum: 8 characters"
             onChange={passwordHandler}
           ></input>
         </div>
         <div className={styles['button-control']}>
-          {(enteredPassword.length > 6 && enteredEmail.includes('@')) ? (
+          {enteredPassword.length > 6 && enteredEmail.includes('@') ? (
             <button type="submit" className={styles['button']}>
               Login
             </button>
