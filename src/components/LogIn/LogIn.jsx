@@ -6,15 +6,14 @@ import styles from './LogIn.module.css';
 const LogIn = ({ logged, changeLog, setUser }) => {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
-  const [passwordCount, setPasswordCount] = useState('');
   const [valid, setValid] = useState(false);
 
   useEffect(() => {
     if (enteredEmail.includes('@') && enteredPassword.length > 7) {
       setValid(true);
     }
-    console.log(enteredPassword)
-    console.log(enteredEmail)
+    //console.log(enteredPassword)
+    //console.log(enteredEmail)
   }, [enteredEmail, enteredPassword]);
 
   function emailHandler(ev) {
@@ -23,7 +22,6 @@ const LogIn = ({ logged, changeLog, setUser }) => {
 
   function passwordHandler(ev) {
     setEnteredPassword(ev.target.value);
-    setPasswordCount(enteredPassword.length)
   }
 
   function submitHandler(event) {
@@ -68,7 +66,7 @@ const LogIn = ({ logged, changeLog, setUser }) => {
         <div className={styles['input-control']}>
           <label>password:</label>
           <input
-            className={ passwordCount > 6 ? (styles['form-input']) : (styles['form-needs-input'])}
+            className={ enteredPassword.length > 7 ? (styles['form-input']) : (styles['form-needs-input'])}
             type="password"
             placeholder='minimum: 8 characters'
             onChange={passwordHandler}
