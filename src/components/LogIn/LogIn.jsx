@@ -1,40 +1,86 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import Card from '../UI/Card';
-
 import styles from './LogIn.module.css';
 
+const cardReducer = (state, action) => {
+  switch (action.type) {
+    case 'EMAIL_INPUT':
+      return {
+        email: action.email,
+        validEmail: action.validEmail,
+        password: state.password,
+        validPassword: state.validPassword,
+      };
+    case 'PASSWORD_INPUT':
+      return {
+        email: state.email,
+        validEmail: state.email,
+        password: action.password,
+        validPassword: action.validPassword,
+      };
+    default:
+      return {
+        email: '',
+        validEmail: null,
+        password: '',
+        validPassword: null,
+      };
+  }
+};
+
 const LogIn = ({ logged, changeLog, setUser }) => {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
+  //const [enteredEmail, setEnteredEmail] = useState('');
+  //const [enteredPassword, setEnteredPassword] = useState('');
   const [valid, setValid] = useState(false);
+
+  const [card, dispatchCard] = useReducer(cardReducer, {
+    email: '',
+    validEmail: null,
+    password: '',
+    validPassword: null,
+  });
 
   useEffect(() => {
     const time = setTimeout(() => {
-      console.log('inside setTimeout')
-      if (enteredEmail.includes('@') && enteredPassword.length > 7) {
+      console.log('inside setTimeout');
+      if (card.validEmail && card.validPassword) {
         setValid(true);
       }
     }, 1000);
     return () => {
-      console.log('inside cleanup')
+      console.log('inside cleanup');
       clearTimeout(time);
     };
     //console.log(enteredPassword)
     //console.log(enteredEmail)
-  }, [enteredEmail, enteredPassword]);
+  }, [card.validEmail, card.validPassword]);
 
   function emailHandler(ev) {
-    setEnteredEmail(ev.target.value);
+    //setEnteredEmail(ev.target.value);
+    let tmp = false;
+    if (ev.target.value[ev.target.value.length - 1] === '@') tmp = true;
+    dispatchCard({
+      type: 'EMAIL_INPUT',
+      email: ev.target.value,
+      validEmail: tmp,
+    });
   }
 
   function passwordHandler(ev) {
-    setEnteredPassword(ev.target.value);
+    //setEnteredPassword(ev.target.value);
+    let tmp = false;
+    if (ev.target.value.length > 7) tmp = true;
+    dispatchCard({
+      type: 'PASSWORD_INPUT',
+      password: ev.target.value,
+      validPassword: tmp,
+    });
   }
 
   function submitHandler(event) {
     event.preventDefault();
-    const tmp = enteredEmail;
-    const sub = enteredPassword;
+    const tmp = card.email;
+    const sub = card.password;
 
     if (tmp[0] && sub[0]) {
       console.log('yes');
@@ -63,35 +109,35 @@ const LogIn = ({ logged, changeLog, setUser }) => {
     <Card className={styles['logIn-card']}>
       <form onSubmit={submitHandler} className={styles['logIn-form']}>
         <div className={styles['input-control']}>
-          <label htmlFor='email'>email:</label>
+          <label htmlFor="email">email:</label>
           <input
             className={
-              enteredEmail.includes('@')
+              card.validEmail
                 ? styles['form-input']
                 : styles['form-needs-input']
             }
-            id='email'
+            id="email"
             type="email"
             placeholder="must include: @"
             onChange={emailHandler}
           ></input>
         </div>
         <div className={styles['input-control']}>
-          <label htmlFor='password'>password:</label>
+          <label htmlFor="password">password:</label>
           <input
             className={
-              enteredPassword.length > 7
+              card.validPassword
                 ? styles['form-input']
                 : styles['form-needs-input']
             }
-            id='password'
+            id="password"
             type="password"
             placeholder="minimum: 8 characters"
             onChange={passwordHandler}
           ></input>
         </div>
         <div className={styles['button-control']}>
-          {enteredPassword.length > 6 && enteredEmail.includes('@') ? (
+          {valid ? (
             <button type="submit" className={styles['button']}>
               Login
             </button>
