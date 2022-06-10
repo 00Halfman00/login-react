@@ -29,10 +29,7 @@ const cardReducer = (state, action) => {
 };
 
 const LogIn = ({ logged, changeLog, setUser }) => {
-  //const [enteredEmail, setEnteredEmail] = useState('');
-  //const [enteredPassword, setEnteredPassword] = useState('');
   const [valid, setValid] = useState(false);
-
   const [card, dispatchCard] = useReducer(cardReducer, {
     email: '',
     validEmail: null,
@@ -42,23 +39,20 @@ const LogIn = ({ logged, changeLog, setUser }) => {
 
   useEffect(() => {
     const time = setTimeout(() => {
-      console.log('inside setTimeout');
       if (card.validEmail && card.validPassword) {
         setValid(true);
       }
-    }, 1000);
+    }, 400);
     return () => {
-      console.log('inside cleanup');
       clearTimeout(time);
     };
-    //console.log(enteredPassword)
-    //console.log(enteredEmail)
   }, [card.validEmail, card.validPassword]);
 
   function emailHandler(ev) {
-    //setEnteredEmail(ev.target.value);
     let tmp = false;
-    if (ev.target.value[ev.target.value.length - 1] === '@') tmp = true;
+    for(let idx = 0; idx < ev.target.value.length; ++idx){
+      if(ev.target.value[idx] === '@') tmp = true;
+    }
     dispatchCard({
       type: 'EMAIL_INPUT',
       email: ev.target.value,
@@ -67,9 +61,10 @@ const LogIn = ({ logged, changeLog, setUser }) => {
   }
 
   function passwordHandler(ev) {
-    //setEnteredPassword(ev.target.value);
     let tmp = false;
-    if (ev.target.value.length > 7) tmp = true;
+    if (ev.target.value.length > 7){
+      tmp = true;
+    } else tmp = false;
     dispatchCard({
       type: 'PASSWORD_INPUT',
       password: ev.target.value,
