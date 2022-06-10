@@ -18,10 +18,34 @@ label {
   text-align: start;
 }
 
-input {
+.form-input {
   flex: 3;
   padding: .3rem;
   font-size: large;
+  background-color: white;
+  border: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 /46%);
+}
+
+.form-needs-input {
+  flex: 3;
+  padding: .3rem;
+  font-size: large;
+  background-color: white;
+  border: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 /46%);
+}
+
+.form-needs-input:focus {
+  flex: 3;
+  padding: .3rem;
+  font-size: large;
+  background-color: salmon;
+  border: red;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(222, 15, 15, 0.46);
 }
 
 .button {
@@ -31,5 +55,15 @@ input {
   border-radius: 30px;
   border: 1px solid goldenrod;
   box-shadow: 0 2px 8px rgb(0 0 0 /46%);
+}
+
+.btn {
+  font-size: larger;
+  padding: .5rem 2rem;
+  background-color: lightgrey;
+  border-radius: 30px;
+  border: 1px solid lightgray;
+  box-shadow: 0 2px 8px rgb(0 0 0 /46%);
+  cursor:not-allowed;
 }
 

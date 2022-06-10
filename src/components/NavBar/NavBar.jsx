@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './NavBar.module.css';
 
 const NavBar = ({ logged, changeLog, user }) => {
-  console.log(user);
+  const name = localStorage.getItem('name');
+
   return (
     <header className={styles['nav-header']}>
-      {user ? (
-        <h1 className={styles['nav-h1']}>{`${user}, practice`}</h1>
+      {name && logged ? (
+        <h1 className={styles['nav-h1']}>{name}, Practice</h1>
       ) : (
         <h1 className={styles['nav-h1']}>Login Practice</h1>
       )}
