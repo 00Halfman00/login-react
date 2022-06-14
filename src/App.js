@@ -1,38 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import NavBar from './components/NavBar/NavBar';
 import Login from './components/LogIn/LogIn';
 import Home from './components/Home/Home';
+import LogContext from './store/context';
 
 function App() {
-  const [log, setLog] = useState(false);
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    const it = localStorage.getItem('oscar@yahoo.com');
-    if ('password02' === it) {
-      setLog(true)
-    }
-  }, []);
-
-  function logHandler(myEmail, myPassword) {
-    localStorage.setItem(myEmail, myPassword);
-    //console.log('logged in')
-    setLog(true);
-  }
-
-  function logOut() {
-    setLog(false);
-    //console.log('logged out')
-    localStorage.removeItem('oscar@yahoo.com');
-  }
-
+  const ctx = useContext(LogContext);
+  console.log(ctx);
   return (
     <React.Fragment>
-      <NavBar logged={log} changeLog={logOut} user={user} />
+      <NavBar logged={ctx.log} logOut={ctx.logOut} />
       <main>
-        {!log && <Login log={log} changeLog={logHandler} setUser={setUser} />}
-        {log && <Home user={user} />}
+        {!ctx.log && <Login log={ctx.log} logIn={ctx.logIn} />}
+        {ctx.log && <Home logOut={ctx.logOut} />}
       </main>
     </React.Fragment>
   );

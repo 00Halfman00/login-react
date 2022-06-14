@@ -1,13 +1,13 @@
 import React from 'react';
 import styles from './NavBar.module.css';
 
-const NavBar = ({ logged, changeLog, user }) => {
+const NavBar = ({ logged, logOut }) => {
   const name = localStorage.getItem('name');
 
   return (
     <header className={styles['nav-header']}>
       {name && logged ? (
-        <h1 className={styles['nav-h1']}>{name}, Practice</h1>
+        <h1 className={styles['nav-h1']}>{name}</h1>
       ) : (
         <h1 className={styles['nav-h1']}>Login Practice</h1>
       )}
@@ -19,7 +19,7 @@ const NavBar = ({ logged, changeLog, user }) => {
             {logged && (
               <button
                 type="submit"
-                onClick={changeLog}
+                onClick={logOut}
                 className={styles['nav-button']}
               >
                 Logout

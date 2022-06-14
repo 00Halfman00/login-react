@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
+
 import Card from '../UI/Card';
+import Input from '../UI/Input';
 import styles from './LogIn.module.css';
 
 const cardReducer = (state, action) => {
@@ -14,7 +16,7 @@ const cardReducer = (state, action) => {
     case 'PASSWORD_INPUT':
       return {
         email: state.email,
-        validEmail: state.email,
+        validEmail: state.validEmail,
         password: action.password,
         validPassword: action.validPassword,
       };
@@ -28,7 +30,7 @@ const cardReducer = (state, action) => {
   }
 };
 
-const LogIn = ({ logged, changeLog, setUser }) => {
+const LogIn = ({ logIn, setUser }) => {
   const [valid, setValid] = useState(false);
   const [card, dispatchCard] = useReducer(cardReducer, {
     email: '',
@@ -41,6 +43,8 @@ const LogIn = ({ logged, changeLog, setUser }) => {
     const time = setTimeout(() => {
       if (card.validEmail && card.validPassword) {
         setValid(true);
+      } else {
+        setValid(false);
       }
     }, 400);
     return () => {
@@ -50,8 +54,8 @@ const LogIn = ({ logged, changeLog, setUser }) => {
 
   function emailHandler(ev) {
     let tmp = false;
-    for(let idx = 0; idx < ev.target.value.length; ++idx){
-      if(ev.target.value[idx] === '@') tmp = true;
+    for (let idx = 0; idx < ev.target.value.length; ++idx) {
+      if (ev.target.value[idx] === '@') tmp = true;
     }
     dispatchCard({
       type: 'EMAIL_INPUT',
@@ -62,7 +66,7 @@ const LogIn = ({ logged, changeLog, setUser }) => {
 
   function passwordHandler(ev) {
     let tmp = false;
-    if (ev.target.value.length > 7){
+    if (ev.target.value.length > 7) {
       tmp = true;
     } else tmp = false;
     dispatchCard({
@@ -74,29 +78,17 @@ const LogIn = ({ logged, changeLog, setUser }) => {
 
   function submitHandler(event) {
     event.preventDefault();
-    const tmp = card.email;
-    const sub = card.password;
-
-    if (tmp[0] && sub[0]) {
-      console.log('yes');
+    console.log(event.target.value);
+    if (card.email[0] && card.password.length > 7) {
       let tmp2 = '';
-      let sub2 = 0;
-      let flag = false;
-      for (let i = 0; i < tmp.length; ++i) {
-        if (tmp[i] === '@') {
-          flag = true;
-        }
-        if (!flag) {
-          tmp2 += tmp[i];
-        }
-        ++sub2;
-        if (sub2 > 7) {
+      for (let i = 0; i < card.email.length; ++i) {
+        if (card.email[i] === '@') {
           break;
         }
+        tmp2 += card.email[i];
       }
-      setUser(tmp2);
       localStorage.setItem('name', tmp2);
-      changeLog(tmp, sub);
+      logIn(card.email, card.password);
     }
   }
 
@@ -105,31 +97,23 @@ const LogIn = ({ logged, changeLog, setUser }) => {
       <form onSubmit={submitHandler} className={styles['logIn-form']}>
         <div className={styles['input-control']}>
           <label htmlFor="email">email:</label>
-          <input
-            className={
-              card.validEmail
-                ? styles['form-input']
-                : styles['form-needs-input']
-            }
+          <Input
+            className={card.validEmail ? 'form-input' : 'form-needs-input'}
             id="email"
             type="email"
             placeholder="must include: @"
             onChange={emailHandler}
-          ></input>
+          />
         </div>
         <div className={styles['input-control']}>
           <label htmlFor="password">password:</label>
-          <input
-            className={
-              card.validPassword
-                ? styles['form-input']
-                : styles['form-needs-input']
-            }
+          <Input
+            className={card.validPassword ? 'form-input' : 'form-needs-input'}
             id="password"
             type="password"
             placeholder="minimum: 8 characters"
             onChange={passwordHandler}
-          ></input>
+          />
         </div>
         <div className={styles['button-control']}>
           {valid ? (
